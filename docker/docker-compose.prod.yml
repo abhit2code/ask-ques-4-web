@@ -1,0 +1,101 @@
+networks:
+  prod-network:
+    name: rag-prod-network
+
+services:
+  # Infrastructure Services
+  redis:
+    image: redis:7-alpine
+    container_name: rag_redis_prod
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - prod-network
+
+  postgres:
+    image: postgres:15
+    container_name: rag_postgres_prod
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    restart: unless-stopped
+    networks:
+      - prod-network
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: rag_qdrant_prod
+    ports:
+      - "6334:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+    networks:
+      - prod-network
+
+  # Application Services
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    image: rag-prod-api:latest
+    container_name: rag_api_prod
+    ports:
+      - "8001:8000"
+    env_file:
+      - ../.env.prod
+    depends_on:
+      - redis
+      - postgres
+      - qdrant
+    restart: unless-stopped
+    networks:
+      - prod-network
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    image: rag-prod-frontend:latest
+    container_name: rag_frontend_prod
+    ports:
+      - "8502:8501"
+    environment:
+      - ENVIRONMENT=production
+      - API_URL=http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - prod-network
+
+  # Worker Services
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.worker
+    image: rag-prod-worker:latest
+    container_name: rag_worker_prod
+    env_file:
+      - ../.env.prod
+    depends_on:
+      - redis
+      - postgres
+      - qdrant
+    restart: unless-stopped
+    networks:
+      - prod-network
+
+volumes:
+  redis_data:
+  postgres_data:
+  qdrant_data:
