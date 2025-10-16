@@ -1,0 +1,69 @@
+networks:
+  dev-network:
+    name: rag-dev-network
+
+services:
+  # Infrastructure Services Only (API and Frontend run locally)
+  redis:
+    image: redis:7-alpine
+    container_name: rag_redis_dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_dev:/data
+    networks:
+      - dev-network
+
+  postgres:
+    image: postgres:15
+    container_name: rag_postgres_dev
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - dev-network
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: rag_qdrant_dev
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data_dev:/qdrant/storage
+    networks:
+      - dev-network
+
+  # Worker Services for background processing
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.worker
+    image: docker-worker:latest
+    container_name: rag_worker_dev
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - POSTGRES_URL=postgresql://postgres:password@postgres:5432/rag_engine
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION_NAME=web_content
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - LLM_MODEL=llama3.2:3b
+      - CHUNK_SIZE=1000
+      - CHUNK_OVERLAP=200
+    depends_on:
+      - redis
+      - postgres
+      - qdrant
+    networks:
+      - dev-network
+
+volumes:
+  redis_data_dev:
+  postgres_data_dev:
+  qdrant_data_dev:
