@@ -9,6 +9,10 @@ class Settings(BaseSettings):
     # Redis Configuration
     redis_url: str = Field(default="redis://localhost:6379", env="REDIS_URL")
     
+    # Cache Configuration
+    embedding_cache_ttl: int = Field(default=86400, env="EMBEDDING_CACHE_TTL")  # 24 hours
+    embedding_cache_prefix: str = Field(default="emb:", env="EMBEDDING_CACHE_PREFIX")
+    
     # PostgreSQL Configuration - Single database
     postgres_url: str = Field(
         default="postgresql://postgres:password@localhost:5432/rag_engine", 
