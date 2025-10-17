@@ -227,7 +227,7 @@ Health check for all services.
 
 ### Prerequisites
 - Docker & Docker Compose
-- Python 3.11+
+- Python 3.9+
 - Git
 
 ### Environment Configuration
@@ -417,15 +417,7 @@ hiredis==2.2.3
 
 ## 🎬 Demo Video
 
-**[Demo Video Link - 7 minutes]**: https://your-demo-video-link.com
-
-The demo showcases:
-1. URL ingestion workflow with real-time status updates
-2. Content change detection and caching behavior  
-3. Semantic search capabilities with source attribution
-4. System monitoring and health checks
-5. Production deployment process
-6. Performance benchmarks and scaling demonstration
+**[Demo Video Link ]**: https://your-demo-video-link.com
 
 ---
 
