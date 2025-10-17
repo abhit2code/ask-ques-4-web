@@ -102,7 +102,7 @@ smart_build() {
 }
 
 build_images() {
-    echo "🔨 Force building all production Docker images..."
+    echo "Force building all production Docker images..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE build --no-cache
     
     # Update all markers
@@ -114,7 +114,7 @@ build_images() {
 }
 
 start_services() {
-    echo "🚀 Starting production services..."
+    echo "Starting production services..."
     
     # Smart build check
     smart_build
@@ -130,7 +130,7 @@ start_services() {
 }
 
 deploy_services() {
-    echo "🚀 Deploying production services..."
+    echo "Deploying production services..."
     
     # Force rebuild
     build_images

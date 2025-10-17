@@ -65,7 +65,7 @@ needs_worker_rebuild() {
 build_service() {
     local service=$1
     local marker=$2
-    echo "🔨 Building $service image..."
+    echo "Building $service image..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE build $service
     touch "$marker"
     echo " $service image built"
@@ -149,7 +149,7 @@ case "${1:-help}" in
         smart_build
         start_services
         echo ""
-        echo "🚀 Now starting backend server..."
+        echo "Now starting backend server..."
         run_backend
         ;;
     down)
