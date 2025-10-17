@@ -174,8 +174,8 @@ def main():
         # Show ingestion status
         if st.session_state.ingesting:
             st.warning("🔄 Processing URL... Please wait.")
-        elif st.session_state.ingestion_complete and st.session_state.last_ingested_url:
-            st.success(f"✅ Last ingested: {st.session_state.last_ingested_url}")
+        # elif st.session_state.ingestion_complete and st.session_state.last_ingested_url:
+        #     st.success(f"✅ Last ingested: {st.session_state.last_ingested_url}")
 
     # Right column - Query Knowledge Base
     with col2:
