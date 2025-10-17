@@ -278,7 +278,12 @@ ollama pull llama3.2:3b
 3. **Start development environment:**
 ```bash
 chmod +x start_dev.sh
-./start_dev.sh
+./start_dev.sh up
+```
+
+4. **Start Frontend**
+```bash
+./start_dev.sh frontend
 ```
 
 This script will:
@@ -287,10 +292,9 @@ This script will:
 - Initialize database tables
 - Start API server, Celery worker, and frontend
 
-4. **Access services:**
+5. **Access services:**
 - Frontend: http://localhost:8501
 - API Documentation: http://localhost:8000/docs
-- Qdrant Dashboard: http://localhost:6333/dashboard
 
 ### Production Deployment
 
