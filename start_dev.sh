@@ -28,22 +28,22 @@ show_help() {
 
 check_requirements() {
     if ! command -v docker &> /dev/null; then
-        echo "❌ Docker is not installed"
+        echo " Docker is not installed"
         exit 1
     fi
     
     if ! command -v docker-compose &> /dev/null; then
-        echo "❌ Docker Compose is not installed"
+        echo " Docker Compose is not installed"
         exit 1
     fi
     
     if [ ! -f ".env.dev" ]; then
-        echo "❌ .env.dev file not found"
+        echo " .env.dev file not found"
         exit 1
     fi
     
     if [ ! -d "venv" ]; then
-        echo "❌ Virtual environment not found. Please create one with: python -m venv venv"
+        echo " Virtual environment not found. Please create one with: python -m venv venv"
         exit 1
     fi
 }
@@ -68,46 +68,46 @@ build_service() {
     echo "🔨 Building $service image..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE build $service
     touch "$marker"
-    echo "✅ $service image built"
+    echo " $service image built"
 }
 
 smart_build() {
     local built_any=false
     
     if needs_worker_rebuild; then
-        echo "📦 Worker changes detected"
+        echo " Worker changes detected"
         build_service "worker" "$WORKER_BUILD_MARKER"
         built_any=true
     fi
     
     if [ "$built_any" = false ]; then
-        echo "✅ All images are up to date, skipping build"
+        echo " All images are up to date, skipping build"
     fi
 }
 
 build_images() {
-    echo "🔨 Building Docker images..."
+    echo " Building Docker images..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE build --no-cache
-    echo "✅ Docker images built successfully"
+    echo " Docker images built successfully"
 }
 
 start_services() {
-    echo "🚀 Starting development infrastructure services..."
+    echo "Starting development infrastructure services..."
     
     # Start services
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE up -d
-    echo "✅ Infrastructure services started"
+    echo " Infrastructure services started"
     
     # Wait for services to be ready
-    echo "⏳ Waiting for services to be ready..."
+    echo " Waiting for services to be ready..."
     sleep 5
     
     # Initialize database
-    echo "🔧 Initializing database..."
+    echo " Initializing database..."
     source venv/bin/activate
     python scripts/init_db.py || echo "⚠️  Database might already be initialized"
     
-    echo "✅ Development environment ready"
+    echo " Development environment ready"
     echo ""
     echo "Infrastructure services:"
     echo "  - Redis: localhost:6379"
@@ -116,13 +116,13 @@ start_services() {
 }
 
 stop_services() {
-    echo "🛑 Stopping development services..."
+    echo " Stopping development services..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE down
-    echo "✅ Development services stopped"
+    echo " Development services stopped"
 }
 
 run_backend() {
-    echo "🚀 Starting backend API server..."
+    echo " Starting backend API server..."
     load_env
     source venv/bin/activate
     export PYTHONPATH="$PWD:$PYTHONPATH"
@@ -130,7 +130,7 @@ run_backend() {
 }
 
 run_frontend() {
-    echo "🚀 Starting frontend server..."
+    echo "Starting frontend server..."
     source venv/bin/activate
     streamlit run frontend.py --server.port=8501 --server.address=0.0.0.0
 }

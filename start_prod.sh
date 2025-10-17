@@ -28,17 +28,17 @@ show_help() {
 
 check_requirements() {
     if ! command -v docker &> /dev/null; then
-        echo "❌ Docker is not installed"
+        echo "Docker is not installed"
         exit 1
     fi
     
     if ! command -v docker-compose &> /dev/null; then
-        echo "❌ Docker Compose is not installed"
+        echo "Docker Compose is not installed"
         exit 1
     fi
     
     if [ ! -f ".env.prod" ]; then
-        echo "❌ .env.prod file not found"
+        echo ".env.prod file not found"
         exit 1
     fi
 }
@@ -69,32 +69,32 @@ build_service() {
     echo "🔨 Building $service image..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE build $service
     touch "$marker"
-    echo "✅ $service image built"
+    echo "$service image built"
 }
 
 smart_build() {
     local built_any=false
     
     if needs_api_rebuild; then
-        echo "📦 API changes detected"
+        echo "API changes detected"
         build_service "api" "$API_BUILD_MARKER"
         built_any=true
     fi
     
     if needs_worker_rebuild; then
-        echo "📦 Worker changes detected"
+        echo "Worker changes detected"
         build_service "worker" "$WORKER_BUILD_MARKER"
         built_any=true
     fi
     
     if needs_frontend_rebuild; then
-        echo "📦 Frontend changes detected"
+        echo "Frontend changes detected"
         build_service "frontend" "$FRONTEND_BUILD_MARKER"
         built_any=true
     fi
     
     if [ "$built_any" = false ]; then
-        echo "✅ All images are up to date, skipping build"
+        echo "All images are up to date, skipping build"
     fi
     
     # Update global marker for compatibility
@@ -110,7 +110,7 @@ build_images() {
     touch "$API_BUILD_MARKER"
     touch "$WORKER_BUILD_MARKER" 
     touch "$FRONTEND_BUILD_MARKER"
-    echo "✅ All production images built successfully"
+    echo "All production images built successfully"
 }
 
 start_services() {
@@ -121,7 +121,7 @@ start_services() {
     
     # Start services
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE up -d
-    echo "✅ Production services started"
+    echo "Production services started"
     echo ""
     echo "Services available at:"
     echo "  - API: http://localhost:8001"
@@ -140,7 +140,7 @@ deploy_services() {
     
     # Start services
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE up -d
-    echo "✅ Production deployment complete"
+    echo "Production deployment complete"
     echo ""
     echo "Services available at:"
     echo "  - API: http://localhost:8001"
@@ -149,15 +149,15 @@ deploy_services() {
 }
 
 stop_services() {
-    echo "🛑 Stopping production services..."
+    echo "Stopping production services..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE down
-    echo "✅ Production services stopped"
+    echo "Production services stopped"
 }
 
 restart_services() {
-    echo "🔄 Restarting production services..."
+    echo " Restarting production services..."
     docker-compose -p $PROJECT_NAME -f $COMPOSE_FILE restart
-    echo "✅ Production services restarted"
+    echo " Production services restarted"
 }
 
 show_logs() {
