@@ -25,41 +25,41 @@ async def test_content_cache():
     
     try:
         # Test 1: First fetch (should not be cached)
-        print("📥 First fetch (should fetch fresh content)...")
+        print(" First fetch (should fetch fresh content)...")
         result1 = await processor.fetch_content(test_url)
-        print(f"✅ From cache: {result1['from_cache']}")
-        print(f"✅ Content hash: {result1['content_hash'][:16]}...")
-        print(f"✅ Content changed: {result1.get('content_changed', 'N/A')}")
+        print(f"From cache: {result1['from_cache']}")
+        print(f"Content hash: {result1['content_hash'][:16]}...")
+        print(f"Content changed: {result1.get('content_changed', 'N/A')}")
         
         # Test 2: Second fetch (should be cached)
-        print("\n📥 Second fetch (should use cache)...")
+        print("\n Second fetch (should use cache)...")
         result2 = await processor.fetch_content(test_url)
-        print(f"✅ From cache: {result2['from_cache']}")
-        print(f"✅ Content hash: {result2['content_hash'][:16]}...")
-        print(f"✅ Content changed: {result2.get('content_changed', 'N/A')}")
+        print(f"From cache: {result2['from_cache']}")
+        print(f"Content hash: {result2['content_hash'][:16]}...")
+        print(f"Content changed: {result2.get('content_changed', 'N/A')}")
         
         # Test 3: Force refresh
-        print("\n📥 Force refresh (should fetch fresh content)...")
+        print("\n Force refresh (should fetch fresh content)...")
         result3 = await processor.fetch_content(test_url, force_refresh=True)
-        print(f"✅ From cache: {result3['from_cache']}")
-        print(f"✅ Content hash: {result3['content_hash'][:16]}...")
-        print(f"✅ Content changed: {result3.get('content_changed', 'N/A')}")
+        print(f"From cache: {result3['from_cache']}")
+        print(f"Content hash: {result3['content_hash'][:16]}...")
+        print(f"Content changed: {result3.get('content_changed', 'N/A')}")
         
         # Verify hashes are consistent
         if result1['content_hash'] == result2['content_hash'] == result3['content_hash']:
-            print("\n✅ All content hashes match - cache working correctly!")
+            print("\nAll content hashes match - cache working correctly!")
         else:
-            print("\n❌ Content hashes don't match - potential issue")
+            print("\nContent hashes don't match - potential issue")
             
         # Test cache service directly
-        print("\n🔍 Testing cache service directly...")
+        print("\nTesting cache service directly...")
         cached_hash = cache.get_content_hash(test_url)
-        print(f"✅ Cached hash: {cached_hash[:16] if cached_hash else 'None'}...")
+        print(f"Cached hash: {cached_hash[:16] if cached_hash else 'None'}...")
         
         print("\n🎉 Content cache test completed successfully!")
         
     except Exception as e:
-        print(f"\n❌ Test failed: {str(e)}")
+        print(f"\nTest failed: {str(e)}")
         return False
     
     return True
