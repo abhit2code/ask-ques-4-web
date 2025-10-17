@@ -91,7 +91,7 @@ CREATE INDEX idx_url_ingestions_status ON url_ingestions(status);
 }
 ```
 
-## 🚀 API Documentation
+## API Documentation
 
 ### Ingestion Endpoints
 
@@ -200,7 +200,7 @@ Health check for all services.
 }
 ```
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 - Docker & Docker Compose
@@ -364,7 +364,7 @@ sqlalchemy==2.0.23
 hiredis==2.2.3
 ```
 
-## 🎯 Design Justifications
+## Design Justifications
 
 ### Technology Choices
 
