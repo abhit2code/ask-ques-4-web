@@ -21,7 +21,7 @@ A production-ready Retrieval-Augmented Generation (RAG) system that asynchronous
 
 **Fault Tolerance**: Comprehensive error handling with automatic retries and graceful degradation.
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Core Framework
 - **FastAPI + Uvicorn**: High-performance async API framework with automatic OpenAPI documentation
@@ -47,7 +47,7 @@ A production-ready Retrieval-Augmented Generation (RAG) system that asynchronous
 - **Docker + Docker Compose**: Containerized deployment with environment consistency
 - **Streamlit**: Interactive web interface for testing and demonstration
 
-## 📊 Database Schema
+## Database Schema
 
 ### PostgreSQL Metadata Schema
 
