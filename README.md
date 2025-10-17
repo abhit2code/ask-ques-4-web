@@ -313,7 +313,6 @@ chmod +x start_prod.sh
 3. **Access production services:**
 - Frontend: http://localhost:8502
 - API: http://localhost:8001
-- Qdrant: http://localhost:6334
 
 ### Docker Setup
 
