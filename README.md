@@ -5,6 +5,7 @@ A production-ready Retrieval-Augmented Generation (RAG) system that asynchronous
 ## 🏗️ Architecture & Design
 
 ### System Architecture
+![ask-ques-4-web-architecture](https://github.com/user-attachments/assets/f162f833-e521-4f14-9416-fe00a9b410f1)
 
 
 ### Design Principles
