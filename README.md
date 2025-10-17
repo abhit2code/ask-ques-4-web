@@ -6,30 +6,6 @@ A production-ready Retrieval-Augmented Generation (RAG) system that asynchronous
 
 ### System Architecture
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   FastAPI       │    │   Celery        │
-│   (Streamlit)   │◄──►│   REST API      │◄──►│   Workers       │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                │                        │
-                                ▼                        ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   PostgreSQL    │    │     Redis       │    │   Web Scraper   │
-│   (Metadata)    │    │   (Queue/Cache) │    │   (Playwright)  │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                        │
-                                                        ▼
-                       ┌─────────────────┐    ┌─────────────────┐
-                       │    Qdrant       │    │   Embedding     │
-                       │ (Vector Store)  │◄──►│   Service       │
-                       └─────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌─────────────────┐
-                       │   Ollama LLM    │
-                       │  (Llama 3.2)    │
-                       └─────────────────┘
-```
 
 ### Design Principles
 
