@@ -163,8 +163,8 @@ def main():
                     st.session_state.ingestion_complete = True
 
                     if(result.get("message") != "Processed Earlier & Unchanged"):
-                        import time
-                        time.sleep(2)
+                        # import time
+                        # time.sleep(2)
                         st.success("🎉 Content ingested successfully! You can now ask questions.")
 
                     # st.rerun()
