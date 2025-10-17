@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     # Cache Configuration
     embedding_cache_ttl: int = Field(default=86400, env="EMBEDDING_CACHE_TTL")  # 24 hours
     embedding_cache_prefix: str = Field(default="emb:", env="EMBEDDING_CACHE_PREFIX")
+    content_cache_ttl: int = Field(default=7200, env="CONTENT_CACHE_TTL")  # 2 hours
+    content_cache_prefix: str = Field(default="content:", env="CONTENT_CACHE_PREFIX")
     
     # PostgreSQL Configuration - Single database
     postgres_url: str = Field(

@@ -3,17 +3,60 @@ from playwright.async_api import async_playwright
 import trafilatura
 from bs4 import BeautifulSoup
 import httpx
-from typing import List, Dict, Any
+import hashlib
+from typing import List, Dict, Any, Optional
 from src.config.settings import settings
+from src.services.cache import CacheService
 import re
 
 class ContentProcessor:
     def __init__(self):
         self.chunk_size = settings.chunk_size
         self.chunk_overlap = settings.chunk_overlap
+        self.cache = CacheService()
     
-    async def fetch_content(self, url: str) -> str:
-        """Try to get content from a URL - first with simple HTTP, then with browser if needed"""
+    def _get_content_hash(self, content: str) -> str:
+        """Generate hash for content"""
+        return hashlib.sha256(content.encode()).hexdigest()
+    
+    async def fetch_content(self, url: str, force_refresh: bool = False) -> Dict[str, Any]:
+        """Fetch content with caching and change detection"""
+        
+        # Check cache first (unless force refresh)
+        if not force_refresh:
+            cached_data = self.cache.get_content(url)
+            if cached_data:
+                return {
+                    "content": cached_data["content"],
+                    "content_hash": cached_data["content_hash"],
+                    "from_cache": True,
+                    "content_changed": False
+                }
+        
+        # Fetch fresh content
+        try:
+            content = await self._fetch_fresh_content(url)
+            content_hash = self._get_content_hash(content)
+            
+            # Check if content has changed
+            cached_hash = self.cache.get_content_hash(url)
+            content_changed = cached_hash != content_hash
+            
+            # Cache the new content
+            self.cache.set_content(url, content, content_hash)
+            
+            return {
+                "content": content,
+                "content_hash": content_hash,
+                "from_cache": False,
+                "content_changed": content_changed
+            }
+            
+        except Exception as e:
+            raise Exception(f"Couldn't fetch content from {url}: {str(e)}")
+    
+    async def _fetch_fresh_content(self, url: str) -> str:
+        """Fetch fresh content from URL"""
         try:
             # Quick attempt with httpx first since it's way faster
             async with httpx.AsyncClient(timeout=30.0) as client:

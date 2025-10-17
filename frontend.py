@@ -154,16 +154,20 @@ def main():
                 else:
                     st.success("✅ URL submitted for processing!")
                     st.info("⏳ Content is being processed in the background...")
-                    st.json(result)
+                    st.info(result.get("message", ""))
+                    # st.json(result)
                     
-                    # Simulate processing completion (in real app, you'd check task status)
-                    import time
-                    time.sleep(2)  # Brief delay to simulate processing
-                    
+                    # # Simulate processing completion (in real app, you'd check task status)
+
                     st.session_state.ingesting = False
                     st.session_state.ingestion_complete = True
-                    st.success("🎉 Content ingested successfully! You can now ask questions.")
-                    st.rerun()
+
+                    if(result.get("message") != "Processed Earlier & Unchanged"):
+                        import time
+                        time.sleep(2)
+                        st.success("🎉 Content ingested successfully! You can now ask questions.")
+
+                    # st.rerun()
             else:
                 st.warning("Please enter a URL")
         

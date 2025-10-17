@@ -55,13 +55,7 @@ load_env() {
 }
 
 # Service-specific build markers
-API_BUILD_MARKER=".last_build_api_dev"
 WORKER_BUILD_MARKER=".last_build_worker_dev"
-
-needs_api_rebuild() {
-    [ ! -f "$API_BUILD_MARKER" ] && return 0
-    find src/api src/services src/config requirements.txt docker/Dockerfile.api -newer "$API_BUILD_MARKER" 2>/dev/null | head -1 | grep -q .
-}
 
 needs_worker_rebuild() {
     [ ! -f "$WORKER_BUILD_MARKER" ] && return 0
@@ -79,12 +73,6 @@ build_service() {
 
 smart_build() {
     local built_any=false
-    
-    if needs_api_rebuild; then
-        echo "📦 API changes detected"
-        build_service "api" "$API_BUILD_MARKER"
-        built_any=true
-    fi
     
     if needs_worker_rebuild; then
         echo "📦 Worker changes detected"
